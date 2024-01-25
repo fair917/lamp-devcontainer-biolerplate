@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  workspace:
+    build: ./workspace
+    command: sleep infinity
+    init: true
+    volumes:
+      - ../:/workspace
+      - ./files/php.ini:/etc/php/7.3/cli/php.ini:ro
+  live-server:
+    build: ./live-server
+    volumes:
+      - ../:/workspace
+      - ./files/php.ini:/etc/php/7.3/apache2/php.ini:ro
+      - ./files/apache2/apache2.conf:/etc/apache2/apache2.conf:ro
+      - ./files/apache2/000-default.conf:/etc/apache2/sites-available/000-default.conf:ro
+      - ./files/apache2/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+      - ./cert:/etc/ssl/self-signed/:ro
+    ports:
+      - 80:80
+      - 443:443
